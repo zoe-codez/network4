@@ -17,7 +17,7 @@ import {
   Office,
 } from "./areas";
 import { MainController } from "./controllers";
-import { Example, LutronPicoBindings, Microgrowery, SensorsExtension, Timers } from "./extensions";
+import { LutronPicoBindings, Microgrowery, SensorsExtension, Timers } from "./extensions";
 import { Zoe } from "./people";
 
 export const HOME_AUTOMATION = CreateApplication({
@@ -31,11 +31,8 @@ export const HOME_AUTOMATION = CreateApplication({
   name: "home_automation",
   priorityInit: ["pico", "sensors"],
   services: {
-    // Example,
     back: BackYard,
-
     bedroom: BedRoom,
-    // // example: Example,
     games: GamesRoom,
     global: MiscAreas,
     kitchen: Kitchen,
