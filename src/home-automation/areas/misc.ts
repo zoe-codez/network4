@@ -14,6 +14,7 @@ export function MiscAreas({
   network4,
   logger,
   synapse,
+  lifecycle,
   hass,
   scheduler,
 }: TServiceParams) {
@@ -25,6 +26,7 @@ export function MiscAreas({
   const downstairs = hass.entity.byId("climate.downstairs");
   const upstairs = hass.entity.byId("climate.ecobee_upstairs");
   const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
+  const houseMode = hass.entity.byId("select.dining_room_recording_mode");
   automation.managed_switch({
     context,
     entity_id: hass.entity.byLabel("tplink_led"),
@@ -57,6 +59,16 @@ export function MiscAreas({
       home_automation.living.scene = "high";
     }
   });
+
+  async function updateRecordingMode() {
+    await hass.call.select.select_option({
+      entity_id: "select.dining_room_recording_mode",
+      option: houseMode.state === "guest" ? "Never" : "Always",
+    });
+  }
+
+  houseMode.onUpdate(updateRecordingMode);
+  lifecycle.onReady(updateRecordingMode);
 
   /**
    * Mental note: this does not properly respect high vs evening high type distinctions
