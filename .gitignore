@@ -12,7 +12,6 @@
 .type_writer
 *bak
 /fixtures.json
-/src/pando
 /src/obsidian
 
 # compiled output
