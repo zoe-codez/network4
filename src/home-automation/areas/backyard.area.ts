@@ -28,9 +28,7 @@ export function BackYard({ hass, automation, context, home_automation }: TServic
 
   isHome.onUpdate(async () => {
     if (!isHome.is_on) {
-      await hass.call.light.turn_off({
-        entity_id: "light.back_yard_dimmer",
-      });
+      await backYardLights.turn_off();
     }
   });
 }

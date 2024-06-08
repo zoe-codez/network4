@@ -14,6 +14,8 @@ export function Office({
   const upstairs = hass.entity.byId("climate.ecobee_upstairs");
   const officePlants = hass.entity.byId("switch.desk_strip_office_plants");
   const currentScene = hass.entity.byId("select.office_current_scene");
+  const craftSwitch = hass.entity.byId("switch.desk_strip_crafts");
+  const ceilingFan = hass.entity.byId("fan.office_ceiling_fan");
 
   synapse.button({
     context,
@@ -255,19 +257,13 @@ export function Office({
   // #region pico.spare
   home_automation.pico.spare({
     context,
-    exec: async () =>
-      await hass.call.switch.turn_off({
-        entity_id: "switch.desk_strip_crafts",
-      }),
+    exec: async () => await craftSwitch.turn_off(),
     match: ["off"],
   });
 
   home_automation.pico.spare({
     context,
-    exec: async () =>
-      await hass.call.switch.turn_on({
-        entity_id: "switch.desk_strip_crafts",
-      }),
+    exec: async () => await craftSwitch.turn_on(),
     match: ["on"],
   });
   // #endregion
@@ -275,10 +271,7 @@ export function Office({
   // #region pico.desk
   home_automation.pico.desk({
     context,
-    exec: async () =>
-      await hass.call.fan.decrease_speed({
-        entity_id: "fan.office_ceiling_fan",
-      }),
+    exec: async () => await ceilingFan.decrease_speed(),
     match: ["lower"],
   });
 
@@ -290,25 +283,19 @@ export function Office({
 
   home_automation.pico.desk({
     context,
-    exec: async () => hass.call.switch.toggle({ entity_id: "switch.meeting_mode" }),
+    exec: async () => (meetingMode.is_on = !meetingMode.is_on),
     match: ["stop", "on"],
   });
 
   home_automation.pico.desk({
     context,
-    exec: async () =>
-      await hass.call.fan.turn_off({
-        entity_id: "fan.office_ceiling_fan",
-      }),
+    exec: async () => await ceilingFan.turn_off(),
     match: ["lower", "lower"],
   });
 
   home_automation.pico.desk({
     context,
-    exec: async () =>
-      await hass.call.fan.increase_speed({
-        entity_id: "fan.office_ceiling_fan",
-      }),
+    exec: async () => await ceilingFan.increase_speed(),
     match: ["raise"],
   });
 

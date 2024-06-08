@@ -11,6 +11,7 @@ export function BedRoom({
 }: TServiceParams) {
   let earlyStop = false;
   const stickLight = hass.entity.byId("switch.stick_light");
+  const ceilingFan = hass.entity.byId("fan.master_bedroom_ceiling_fan");
   const { fanSoundPlaying, isHome } = home_automation.sensors;
   // # General functions
 
@@ -51,21 +52,13 @@ export function BedRoom({
   });
 
   scheduler.cron({
-    exec: async () => {
-      await hass.call.switch.turn_off({
-        entity_id: "switch.stick_light",
-      });
-    },
+    exec: async () => await stickLight.turn_off(),
     schedule: CronExpression.EVERY_DAY_AT_MIDNIGHT,
   });
 
   scheduler.cron({
-    exec: async () => {
-      await hass.call.switch.turn_on({
-        entity_id: "switch.stick_light",
-      });
-    },
-    schedule: CronExpression.EVERY_DAY_AT_7PM,
+    exec: async () => await stickLight.turn_on(),
+    schedule: CronExpression.EVERY_DAY_AT_MIDNIGHT,
   });
 
   automation.managed_switch({
@@ -160,10 +153,7 @@ export function BedRoom({
   // # Pico bindings
   home_automation.pico.bed({
     context,
-    exec: async () =>
-      await hass.call.fan.increase_speed({
-        entity_id: "fan.master_bedroom_ceiling_fan",
-      }),
+    exec: async () => await ceilingFan.increase_speed(),
     match: ["raise", "raise"],
   });
 
@@ -172,9 +162,7 @@ export function BedRoom({
     exec: async () => {
       room.scene = "auto";
       if (stickLight.state === "on") {
-        await hass.call.switch.turn_off({
-          entity_id: "switch.stick_light",
-        });
+        await stickLight.turn_off();
       }
     },
     match: ["stop", "stop"],
@@ -182,10 +170,7 @@ export function BedRoom({
 
   home_automation.pico.bed({
     context,
-    exec: async () =>
-      await hass.call.fan.decrease_speed({
-        entity_id: "fan.master_bedroom_ceiling_fan",
-      }),
+    exec: async () => await ceilingFan.decrease_speed(),
     match: ["lower", "lower"],
   });
 
@@ -203,7 +188,7 @@ export function BedRoom({
 
   home_automation.pico.bed({
     context,
-    exec: async () => await hass.call.switch.turn_off({ entity_id: "switch.stick_light" }),
+    exec: async () => await stickLight.turn_off(),
     match: ["off", "off"],
   });
 
