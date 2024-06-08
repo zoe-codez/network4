@@ -1,11 +1,6 @@
 import { TServiceParams } from "@digital-alchemy/core";
 
-export function Loft({
-  automation,
-  context,
-  home_automation,
-  hass,
-}: TServiceParams) {
+export function Loft({ automation, context, home_automation, hass }: TServiceParams) {
   const room = automation.room({
     area: "loft",
     context,
@@ -63,7 +58,7 @@ export function Loft({
       if (meetingMode.state === "on") {
         return false;
       }
-      if (!automation.solar.isBetween("dawn", "dusk")) {
+      if (!automation.solar.isBetween("dawn", "dusk") || automation.time.isBefore("AM8")) {
         return false;
       }
       if (isHome.state === "off") {

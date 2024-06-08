@@ -1,7 +1,7 @@
 import { TServiceParams } from "@digital-alchemy/core";
 
-export function Kitchen({ automation, context, hass }: TServiceParams) {
-  const houseMode = hass.entity.byId("select.house_mode");
+export function Kitchen({ automation, context, home_automation }: TServiceParams) {
+  const { houseMode } = home_automation.sensors;
   const room = automation.room({
     area: "kitchen",
     context,
@@ -49,7 +49,7 @@ export function Kitchen({ automation, context, hass }: TServiceParams) {
     shouldBeOn: () => {
       return (
         automation.solar.isBetween("sunrise", "sunset") &&
-        automation.time.isBefore(houseMode.state === "guest" ? "PM4" : "PM6:30")
+        automation.time.isBefore(houseMode.current_option === "guest" ? "PM4" : "PM6:30")
       );
     },
   });

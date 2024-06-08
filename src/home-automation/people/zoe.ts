@@ -12,8 +12,7 @@ export function Zoe({ hass, home_automation, logger }: TServiceParams) {
   function updateIsHome() {
     const current = isHome.storage.get("is_on");
     const updated =
-      ["home", "near home"].includes(tracker.state.toLowerCase()) ||
-      wifi.state === "TheGoodStuff";
+      ["home", "near home"].includes(tracker.state.toLowerCase()) || wifi.state === "TheGoodStuff";
     if (current !== updated) {
       logger.debug({ current, updated }, "updating is home");
       isHome.storage.set("is_on", updated);

@@ -7,6 +7,7 @@ words:
   - aliceblue
   - antiquewhite
   - astro
+  - barcodes
   - bithound
   - blanchedalmond
   - blueviolet
@@ -19,17 +20,13 @@ words:
   - codez
   - cornflowerblue
   - cornsilk
-  - ingverb
   - creationrc
   - csize
   - darkcyan
-  - tplink
   - darkgoldenrod
   - darkgray
   - darkgreen
   - darkgrey
-  - obsidian
-  - immich
   - darkkhaki
   - darkmagenta
   - darkolivegreen
@@ -42,10 +39,8 @@ words:
   - darkslategray
   - darkslategrey
   - darkturquoise
-  - olrapi
   - darkviolet
   - datasources
-  - gitea
   - datetime
   - dayslide
   - dbaeumer
@@ -60,6 +55,7 @@ words:
   - dpms
   - duedate
   - ecobee
+  - endregion
   - entites
   - esbenp
   - execa
@@ -71,6 +67,7 @@ words:
   - gainsboro
   - gbit
   - ghostwhite
+  - gitea
   - googlemaps
   - gotify
   - greenyellow
@@ -85,7 +82,9 @@ words:
   - hsts
   - hvac
   - idris
+  - immich
   - indianred
+  - ingverb
   - intellij
   - interwebs
   - julianday
@@ -141,8 +140,10 @@ words:
   - nrwl
   - nsoult
   - nxignore
+  - obsidian
   - oldlace
   - olivedrab
+  - olrapi
   - openai
   - orangered
   - palegoldenrod
@@ -183,23 +184,23 @@ words:
   - sonarjs
   - springgreen
   - steelblue
+  - templow
   - terminalizer
   - testrc
   - timelapse
   - timonwong
   - tmid
-  - templow
   - toolbelt
+  - tplink
   - tsdoc
   - typeof
   - undici
   - unitless
-  - vividra
-  - barcodes
   - unpublish
+  - userentities
   - userfields
   - visbility
-  - userentities
+  - vividra
   - vsix
   - whitesmoke
   - womp

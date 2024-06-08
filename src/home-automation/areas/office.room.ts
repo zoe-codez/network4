@@ -10,8 +10,20 @@ export function Office({
   scheduler,
   network4,
 }: TServiceParams) {
+  const { meetingMode, isHome } = home_automation.sensors;
+  const upstairs = hass.entity.byId("climate.ecobee_upstairs");
+  const officePlants = hass.entity.byId("switch.desk_strip_office_plants");
+  const currentScene = hass.entity.byId("select.office_current_scene");
+
+  synapse.button({
+    context,
+    name: "Office Focus",
+    press: async () => await Focus(),
+  });
+
   const DIM_SCENES = new Set<typeof room.scene>(["off", "night", "dim", "evening"]);
-  // // # General functions
+
+  // # General functions
   function AutoScene(hold = true): typeof room.scene {
     if (automation.time.isBetween("AM6", "PM10")) {
       return "auto";
@@ -21,6 +33,7 @@ export function Office({
       : "night";
   }
 
+  // #MARK: focus()
   async function Focus() {
     logger.info(`focus office`);
     home_automation.bedroom.scene = "off";
@@ -33,7 +46,7 @@ export function Office({
     room.scene = AutoScene();
   }
 
-  // # Scheduler
+  // #MARK: 10pm transition
   scheduler.cron({
     exec: async () => {
       const auto = AutoScene();
@@ -49,7 +62,7 @@ export function Office({
     schedule: CronExpression.EVERY_10_MINUTES,
   });
 
-  // # Room definition
+  // #MARK: Room definition
   const room = automation.room({
     area: "office",
     context,
@@ -131,72 +144,58 @@ export function Office({
     },
   });
 
-  // #MARK: Entities
-  const upstairs = hass.entity.byId("climate.ecobee_upstairs");
-  const officePlants = hass.entity.byId("switch.desk_strip_office_plants");
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
-  const currentScene = hass.entity.byId("select.office_current_scene");
-  const meetingMode = hass.entity.byId("switch.meeting_mode");
-  // const houseMode = hass.entity.byId("select.house_mode");
-
-  synapse.button({
-    context,
-    name: "Office Focus",
-    press: async () => await Focus(),
-  });
-
-  // # Managed switches
-  // ## Blanket light
+  // #MARK: blanket light
   automation.managed_switch({
     context,
     entity_id: "switch.blanket_light",
     onUpdate: [meetingMode, isHome],
     shouldBeOn() {
-      if (isHome.state === "off") {
+      if (!isHome.is_on) {
         return false;
       }
-      if (meetingMode.state === "on") {
+      if (meetingMode.is_on) {
         return true;
       }
       return automation.time.isBetween("AM7", "PM7");
     },
   });
 
-  // ## Fairy lights
+  // #MARK: fairy lights
   automation.managed_switch({
     context,
     entity_id: "switch.fairy_lights",
     onUpdate: [meetingMode, isHome],
     shouldBeOn() {
-      if (isHome.state === "off") {
+      if (!isHome.is_on) {
         return false;
       }
       return automation.time.isBetween("AM7", "PM10");
     },
   });
 
+  // #MARK: dragonfly lights
   automation.managed_switch({
     context,
     entity_id: "switch.dragonfly_lights",
     onUpdate: [officePlants, meetingMode, isHome],
     shouldBeOn() {
-      if (isHome.state === "off") {
+      if (!isHome.is_on) {
         return false;
       }
-      if (meetingMode.state == "on") {
+      if (meetingMode.is_on) {
         return true;
       }
       return !automation.time.isBetween("AM1:30", "PM4");
     },
   });
 
-  // ## Plant lights
+  // #MARK: office plants
   automation.managed_switch({
     context,
     entity_id: "switch.desk_strip_office_plants",
     onUpdate: [meetingMode, upstairs],
     shouldBeOn() {
-      if (meetingMode.state === "on") {
+      if (meetingMode.is_on) {
         return false;
       }
       if (!automation.solar.isBetween("sunrise", "sunset")) {
@@ -219,13 +218,13 @@ export function Office({
     },
   });
 
-  // ## Wax warmer
+  // #MARK: wax warmer
   automation.managed_switch({
     context,
     entity_id: "switch.desk_strip_wax",
     onUpdate: [currentScene, isHome],
     shouldBeOn() {
-      if (isHome.state === "off") {
+      if (!isHome.is_on) {
         return false;
       }
       const scene = room.scene;
@@ -233,8 +232,7 @@ export function Office({
     },
   });
 
-  // # Pico bindings
-  // ## Wall
+  // #region pico.office
   home_automation.pico.office({
     context,
     exec: async () => (room.scene = "high"),
@@ -252,8 +250,9 @@ export function Office({
     exec: async () => (room.scene = "off"),
     match: ["off"],
   });
+  // #endregion
 
-  // ## Spare
+  // #region pico.spare
   home_automation.pico.spare({
     context,
     exec: async () =>
@@ -271,8 +270,9 @@ export function Office({
       }),
     match: ["on"],
   });
+  // #endregion
 
-  // ## Desk
+  // #region pico.desk
   home_automation.pico.desk({
     context,
     exec: async () =>
@@ -312,7 +312,6 @@ export function Office({
     match: ["raise"],
   });
 
-  // plug repurposed while cold out
   home_automation.pico.desk({
     context,
     exec: async () =>
@@ -339,7 +338,9 @@ export function Office({
     exec: async () => (room.scene = "off"),
     match: ["off"],
   });
+  // #endregion
 
+  // #MARK: monitor control
   currentScene.onUpdate(async () => {
     await (DIM_SCENES.has(room.scene)
       ? network4.graft.setMonitorDim()

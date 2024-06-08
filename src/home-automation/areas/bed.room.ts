@@ -11,8 +11,7 @@ export function BedRoom({
 }: TServiceParams) {
   let earlyStop = false;
   const stickLight = hass.entity.byId("switch.stick_light");
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
-  const { fanSoundPlaying } = home_automation.sensors;
+  const { fanSoundPlaying, isHome } = home_automation.sensors;
   // # General functions
 
   async function napTime(time: number) {
@@ -21,7 +20,7 @@ export function BedRoom({
     await network4.maple.startSound();
     setTimeout(async () => {
       room.scene = "high";
-      fanSoundPlaying.storage.set("is_on", false);
+      fanSoundPlaying.is_on = false;
       await network4.maple.stopSound();
     }, time);
   }
@@ -44,7 +43,7 @@ export function BedRoom({
   scheduler.cron({
     exec: async () => {
       if (!earlyStop) {
-        fanSoundPlaying.storage.set("is_on", false);
+        fanSoundPlaying.is_on = false;
         await network4.maple.stopSound();
       }
     },
@@ -74,7 +73,7 @@ export function BedRoom({
     entity_id: "switch.bedroom_wax_warmer",
     onUpdate: [stickLight, isHome],
     shouldBeOn() {
-      return isHome.state === "on" && automation.time.isAfter("PM9") && stickLight.state === "on";
+      return isHome.is_on && automation.time.isAfter("PM9") && stickLight.state === "on";
     },
   });
 
@@ -211,11 +210,11 @@ export function BedRoom({
   home_automation.pico.bed({
     context,
     exec: async () => {
-      if (fanSoundPlaying.storage.get("is_on") === true) {
+      if (fanSoundPlaying.is_on) {
         return;
       }
       if (!automation.time.isBetween("AM8", "PM10")) {
-        fanSoundPlaying.storage.set("is_on", true);
+        fanSoundPlaying.is_on = true;
         await network4.maple.startSound();
       }
     },
@@ -248,7 +247,7 @@ export function BedRoom({
 
   hass.entity.byId("select.master_bedroom_current_scene").onUpdate(async () => {
     if (automation.time.isBetween("AM6", "AM8") && room.scene.includes("high")) {
-      fanSoundPlaying.storage.set("is_on", false);
+      fanSoundPlaying.is_on = false;
       earlyStop = true;
       await network4.maple.stopSound();
     }

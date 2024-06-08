@@ -1,10 +1,6 @@
 import { TServiceParams } from "@digital-alchemy/core";
 
-export function GamesRoom({
-  automation,
-  home_automation,
-  context,
-}: TServiceParams) {
+export function GamesRoom({ automation, home_automation, context }: TServiceParams) {
   const room = automation.room({
     area: "games_room",
     context,

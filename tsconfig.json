@@ -36,6 +36,5 @@
     "dist",
     "src/**/*.spec.ts",
     "src/cambium",
-    "src/pando",
   ]
 }

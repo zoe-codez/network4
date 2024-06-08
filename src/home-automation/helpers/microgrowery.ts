@@ -1,4 +1,4 @@
-import { ONE_THIRD } from "@digital-alchemy/core";
+import { DOWN, ONE_THIRD, UP } from "@digital-alchemy/core";
 
 export type GrowStatus = {
   currentNutrients: GrowMixture;
@@ -28,6 +28,18 @@ export type GrowMixture = Partial<Record<GrowNutrients, number>>;
 
 export type MasterSchedule = Record<GrowStages, GrowMixture[]>;
 
+const NUTRIENT_ORDER = [
+  GrowNutrients.floraMicro,
+  GrowNutrients.floraGro,
+  GrowNutrients.floraBloom,
+  GrowNutrients.floraBlend,
+  GrowNutrients.calMag,
+  GrowNutrients.humicAcid,
+  GrowNutrients.liquidKoolBloom,
+  GrowNutrients.armorSi,
+  GrowNutrients.dryKoolBloom,
+];
+
 // ? ml / g nutrients at 15 gallon dilution
 export const SCHEDULE = {
   flower: [
@@ -37,7 +49,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 113,
       [GrowNutrients.floraBloom]: 113,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 150,
       [GrowNutrients.floraBlend]: 75,
     },
     {
@@ -46,7 +58,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 150,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 175,
       [GrowNutrients.floraBlend]: 75,
       [GrowNutrients.liquidKoolBloom]: 15,
     },
@@ -56,7 +68,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 150,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 175,
       [GrowNutrients.floraBlend]: 75,
       [GrowNutrients.liquidKoolBloom]: 38,
     },
@@ -66,7 +78,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 188,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 200,
       [GrowNutrients.liquidKoolBloom]: 38,
     },
     {
@@ -75,7 +87,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 188,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 200,
       [GrowNutrients.liquidKoolBloom]: 38,
     },
     {
@@ -84,7 +96,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 225,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 200,
       [GrowNutrients.liquidKoolBloom]: 75,
     },
     {
@@ -93,7 +105,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 225,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 200,
       [GrowNutrients.liquidKoolBloom]: 75,
     },
     {
@@ -102,7 +114,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 75,
       [GrowNutrients.floraGro]: 38,
       [GrowNutrients.floraBloom]: 225,
-      [GrowNutrients.humicAcid]: 75,
+      [GrowNutrients.humicAcid]: 200,
       [GrowNutrients.liquidKoolBloom]: 75,
       [GrowNutrients.dryKoolBloom]: 8,
     },
@@ -121,7 +133,7 @@ export const SCHEDULE = {
       [GrowNutrients.floraMicro]: 113,
       [GrowNutrients.floraGro]: 150,
       [GrowNutrients.floraBloom]: 38,
-      [GrowNutrients.humicAcid]: 150,
+      [GrowNutrients.humicAcid]: 100,
       [GrowNutrients.floraBlend]: 150,
     },
     {
@@ -136,15 +148,15 @@ export const SCHEDULE = {
   ],
 };
 
-export function scaleMixture(
-  mixture: GrowMixture,
-  gallons: number,
-): GrowMixture {
+export function scaleMixture(mixture: GrowMixture, gallons: number): GrowMixture {
   return Object.fromEntries(
-    Object.entries(mixture).map(([key, value]) => [
-      key as GrowNutrients,
-      Math.floor((value / GAL_RATIO) * gallons),
-    ]),
+    Object.entries(mixture)
+      .sort(([a], [b]) =>
+        NUTRIENT_ORDER.indexOf(a as GrowNutrients) > NUTRIENT_ORDER.indexOf(b as GrowNutrients)
+          ? UP
+          : DOWN,
+      )
+      .map(([key, value]) => [key as GrowNutrients, Math.floor((value / GAL_RATIO) * gallons)]),
   );
 }
 

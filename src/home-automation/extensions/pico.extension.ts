@@ -46,13 +46,8 @@ type TEventData<NAME extends DeviceName> = {
   data: PicoEvent<NAME>;
 };
 
-export function LutronPicoBindings({
-  automation,
-  internal,
-}: TServiceParams): PicoBindings {
-  function LutronPicoSequenceMatcher<NAME extends DeviceName>(
-    target_device: NAME,
-  ) {
+export function LutronPicoBindings({ automation, internal }: TServiceParams): PicoBindings {
+  function LutronPicoSequenceMatcher<NAME extends DeviceName>(target_device: NAME) {
     return function ({ match, exec, context }: PicoWatcher) {
       return automation.sequence({
         context,

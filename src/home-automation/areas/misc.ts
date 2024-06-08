@@ -23,10 +23,9 @@ export function MiscAreas({
   //
 
   const list = ["office", "bed", "bedroom", "living", "desk"] as const;
+  const { isHome, houseMode } = home_automation.sensors;
   const downstairs = hass.entity.byId("climate.downstairs");
   const upstairs = hass.entity.byId("climate.ecobee_upstairs");
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
-  const houseMode = hass.entity.byId("select.dining_room_recording_mode");
   automation.managed_switch({
     context,
     entity_id: hass.entity.byLabel("tplink_led"),
@@ -63,7 +62,7 @@ export function MiscAreas({
   async function updateRecordingMode() {
     await hass.call.select.select_option({
       entity_id: "select.dining_room_recording_mode",
-      option: houseMode.state === "guest" ? "Never" : "Always",
+      option: houseMode.current_option === "guest" ? "Never" : "Always",
     });
   }
 

@@ -1,9 +1,8 @@
 import { HALF, SINGLE, TServiceParams } from "@digital-alchemy/core";
 
-export function BackYard({ hass, automation, context }: TServiceParams) {
-  const houseMode = hass.entity.byId("select.house_mode");
+export function BackYard({ hass, automation, context, home_automation }: TServiceParams) {
+  const { isHome, houseMode } = home_automation.sensors;
   const backYardLights = hass.entity.byId("light.back_yard_dimmer");
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
 
   automation.managed_switch({
     context,
@@ -11,7 +10,7 @@ export function BackYard({ hass, automation, context }: TServiceParams) {
     onUpdate: [houseMode, backYardLights],
     shouldBeOn() {
       const [NOW, PM7, PM3] = automation.time.shortTime(["NOW", "PM7", "PM3"]);
-      if (houseMode.state === "guest") {
+      if (houseMode.current_option === "guest") {
         return true;
       }
       if (backYardLights.state === "on" && NOW.isAfter(PM3)) {
@@ -28,7 +27,7 @@ export function BackYard({ hass, automation, context }: TServiceParams) {
   });
 
   isHome.onUpdate(async () => {
-    if (isHome.state !== "on") {
+    if (!isHome.is_on) {
       await hass.call.light.turn_off({
         entity_id: "light.back_yard_dimmer",
       });

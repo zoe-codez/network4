@@ -98,9 +98,7 @@ export function LivingRoom({
   });
 
   // # Entities
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
-  const meetingMode = hass.entity.byId("switch.meeting_mode");
-  const houseMode = hass.entity.byId("select.house_mode");
+  const { isHome, meetingMode, houseMode } = home_automation.sensors;
 
   async function focus() {
     home_automation.kitchen.scene = "off";
@@ -114,7 +112,7 @@ export function LivingRoom({
     entity_id: "switch.media_backdrop",
     onUpdate: [meetingMode, isHome],
     shouldBeOn() {
-      if (isHome.state === "off") {
+      if (!isHome.is_on) {
         return false;
       }
       if (automation.solar.isBetween("sunriseEnd", "sunriseEnd")) {
@@ -132,7 +130,7 @@ export function LivingRoom({
       if (!automation.time.isBetween("AM5", "PM5")) {
         return true;
       }
-      return houseMode.state === "guest";
+      return houseMode.current_option === "guest";
     },
   });
 
