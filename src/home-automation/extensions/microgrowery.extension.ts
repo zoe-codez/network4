@@ -24,9 +24,9 @@ export function Microgrowery({
   network4,
   logger,
 }: TServiceParams) {
-  const tentLight = hass.entity.byId("switch.tent_strip_lights");
+  const tentLight = hass.refBy.id("switch.tent_strip_lights");
   const { tent, houseMode } = home_automation.sensors;
-  const gamesScene = hass.entity.byId("select.games_room_current_scene");
+  const gamesScene = hass.refBy.id("select.games_room_current_scene");
 
   scheduler.cron({
     async exec() {
@@ -73,13 +73,13 @@ export function Microgrowery({
     entity_id: "switch.tent_strip_lights",
     onUpdate: [tent.mode],
     shouldBeOn: () => {
-      if (tent.mode.current_option === "debug") {
-        return true;
-      }
-      if (tent.mode.current_option === "flower") {
-        return !automation.time.isBetween("AM6", "PM6");
-      }
-      return !automation.time.isBetween("AM2", "AM8");
+      return !automation.time.isBetween("AM6", "PM6");
+      //   if (tent.mode.current_option === "debug") {
+      //   return true;
+      // }
+      // if (tent.mode.current_option === "flower") {
+      // }
+      // return !automation.time.isBetween("AM2", "AM8");
     },
   });
 
@@ -114,7 +114,7 @@ export function Microgrowery({
   automation.managed_switch({
     context,
     entity_id: "switch.tent_strip_extra",
-    onUpdate: [hass.entity.byId("select.tent_mode")],
+    onUpdate: [hass.refBy.id("select.tent_mode")],
     shouldBeOn: () => {
       return tent.mode.current_option !== "debug";
     },

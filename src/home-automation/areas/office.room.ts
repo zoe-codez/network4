@@ -1,4 +1,5 @@
 import { CronExpression, TServiceParams } from "@digital-alchemy/core";
+import dayjs from "dayjs";
 
 export function Office({
   synapse,
@@ -11,11 +12,11 @@ export function Office({
   network4,
 }: TServiceParams) {
   const { meetingMode, isHome } = home_automation.sensors;
-  const upstairs = hass.entity.byId("climate.ecobee_upstairs");
-  const officePlants = hass.entity.byId("switch.desk_strip_office_plants");
-  const currentScene = hass.entity.byId("select.office_current_scene");
-  const craftSwitch = hass.entity.byId("switch.desk_strip_crafts");
-  const ceilingFan = hass.entity.byId("fan.office_ceiling_fan");
+  const upstairs = hass.refBy.id("climate.ecobee_upstairs");
+  const officePlants = hass.refBy.id("switch.desk_strip_office_plants");
+  const currentScene = hass.refBy.id("select.office_current_scene");
+  const craftSwitch = hass.refBy.id("switch.desk_strip_crafts");
+  const ceilingFan = hass.refBy.id("fan.office_ceiling_fan");
 
   synapse.button({
     context,
@@ -43,7 +44,7 @@ export function Office({
     home_automation.kitchen.scene = "off";
     home_automation.living.scene = "off";
     await hass.call.switch.turn_off({
-      entity_id: hass.entity.byLabel("transition_device"),
+      entity_id: hass.idBy.label("transition_device"),
     });
     room.scene = AutoScene();
   }
@@ -146,6 +147,14 @@ export function Office({
     },
   });
 
+  automation.solar.onEvent({
+    eventName: "dusk",
+    exec() {
+      logger.info("20 minutes before dusk");
+    },
+    offset: "20m",
+  });
+
   // #MARK: blanket light
   automation.managed_switch({
     context,
@@ -158,8 +167,15 @@ export function Office({
       if (meetingMode.is_on) {
         return true;
       }
-      return automation.time.isBetween("AM7", "PM7");
+      return !automation.time.isBetween("AM7", "PM7");
     },
+  });
+
+  const HOUR = 1000 * 60 * 60;
+  scheduler.sliding({
+    exec: () => logger.info("sometime during the workday"),
+    next: () => dayjs().add(Math.floor(Math.random() * 8 * 60), "minute"),
+    reset: CronExpression.MONDAY_TO_FRIDAY_AT_8AM,
   });
 
   // #MARK: fairy lights

@@ -148,7 +148,7 @@ export function LivingRoom({
       home_automation.office.scene = "off";
       home_automation.bedroom.scene = "off";
       await hass.call.switch.turn_off({
-        entity_id: hass.entity.byFloor("upstairs", "switch"),
+        entity_id: hass.idBy.floor("upstairs", "switch"),
       });
       await home_automation.global.focus();
     },

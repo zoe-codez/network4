@@ -75,7 +75,7 @@ export function BackupCoordinator({
   let offsiteInProgress = false;
   let offsiteWorkflow: () => TBlackHole;
 
-  const meetingMode = hass.entity.byId("switch.meeting_mode");
+  const meetingMode = hass.refBy.id("switch.meeting_mode");
   const waitingLocks: ((result: boolean) => TBlackHole)[] = [];
   const cambium = network4.base(context);
 

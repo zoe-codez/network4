@@ -60,6 +60,9 @@ setImmediate(async () => {
       boilerplate: {
         LOG_LEVEL: "trace",
       },
+      fastify: {
+        PORT: 7000,
+      },
     },
     showExtraBootStats: true,
   });

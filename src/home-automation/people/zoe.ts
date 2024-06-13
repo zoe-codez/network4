@@ -1,8 +1,8 @@
 import { SECOND, TServiceParams } from "@digital-alchemy/core";
 
-export function Zoe({ hass, home_automation, logger, lifecycle }: TServiceParams) {
-  const tracker = hass.entity.byId("device_tracker.air_plant");
-  const wifi = hass.entity.byId("sensor.air_plant_wifi_connection");
+export function Zoe({ hass, home_automation, logger }: TServiceParams) {
+  const tracker = hass.refBy.id("device_tracker.air_plant");
+  const wifi = hass.refBy.id("sensor.air_plant_wifi_connection");
   const { isHome } = home_automation.sensors;
 
   tracker.onUpdate(() => updateIsHome());

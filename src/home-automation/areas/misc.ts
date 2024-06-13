@@ -24,11 +24,11 @@ export function MiscAreas({
 
   const list = ["office", "bed", "bedroom", "living", "desk"] as const;
   const { isHome, houseMode } = home_automation.sensors;
-  const downstairs = hass.entity.byId("climate.downstairs");
-  const upstairs = hass.entity.byId("climate.ecobee_upstairs");
+  const downstairs = hass.refBy.id("climate.downstairs");
+  const upstairs = hass.refBy.id("climate.ecobee_upstairs");
   automation.managed_switch({
     context,
-    entity_id: hass.entity.byLabel("tplink_led"),
+    entity_id: hass.idBy.label("tplink_led"),
     shouldBeOn() {
       return automation.solar.isBetween("dawn", "dusk");
     },
@@ -42,7 +42,7 @@ export function MiscAreas({
     home_automation.office.scene = "off";
     home_automation.bedroom.scene = "off";
     await hass.call.switch.turn_off({
-      entity_id: hass.entity.byLabel("transition_device"),
+      entity_id: hass.idBy.label("transition_device"),
     });
   }
 
@@ -142,8 +142,8 @@ export function MiscAreas({
     schedule: CronExpression.EVERY_DAY_AT_5AM,
   });
 
-  const windowsOpen = hass.entity.byId("switch.windows_open");
-  const guestMode = hass.entity.byId("switch.meeting_mode");
+  const windowsOpen = hass.refBy.id("switch.windows_open");
+  const guestMode = hass.refBy.id("switch.meeting_mode");
 
   windowsOpen.onUpdate(async () => {
     const expected = windowsOpen.state === "on" ? "off" : "heat_cool";
@@ -157,7 +157,7 @@ export function MiscAreas({
     await network4.orchid.playSound(file);
   }
 
-  hass.entity.byId("binary_sensor.doorbell_doorbell").onUpdate(async () => await globalDoorbell());
+  hass.refBy.id("binary_sensor.doorbell_doorbell").onUpdate(async () => await globalDoorbell());
 
   /**
    * Keep away tricker or treaters!
@@ -215,7 +215,7 @@ export function MiscAreas({
   return {
     focus: async () =>
       await hass.call.switch.turn_off({
-        entity_id: hass.entity.byLabel("transition_device"),
+        entity_id: hass.idBy.label("transition_device"),
       }),
     globalDoorbell,
     globalOff,

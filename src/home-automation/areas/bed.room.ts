@@ -10,8 +10,8 @@ export function BedRoom({
   network4,
 }: TServiceParams) {
   let earlyStop = false;
-  const stickLight = hass.entity.byId("switch.stick_light");
-  const ceilingFan = hass.entity.byId("fan.master_bedroom_ceiling_fan");
+  const stickLight = hass.refBy.id("switch.stick_light");
+  const ceilingFan = hass.refBy.id("fan.master_bedroom_ceiling_fan");
   const { fanSoundPlaying, isHome } = home_automation.sensors;
   // # General functions
 
@@ -230,7 +230,7 @@ export function BedRoom({
     match: ["on"],
   });
 
-  hass.entity.byId("select.master_bedroom_current_scene").onUpdate(async () => {
+  hass.refBy.id("select.master_bedroom_current_scene").onUpdate(async () => {
     if (automation.time.isBetween("AM6", "AM8") && room.scene.includes("high")) {
       fanSoundPlaying.is_on = false;
       earlyStop = true;

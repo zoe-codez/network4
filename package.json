@@ -21,15 +21,15 @@
   "license": "ISC",
   "packages": {},
   "dependencies": {
-    "@digital-alchemy/automation": "^0.3.10",
-    "@digital-alchemy/core": "^0.3.17",
-    "@digital-alchemy/fastify-extension": "^0.3.3",
-    "@digital-alchemy/gotify-extension": "^0.3.4",
+    "@digital-alchemy/automation": "^24.6.1",
+    "@digital-alchemy/core": "^24.6.1",
+    "@digital-alchemy/fastify-extension": "^24.6.1",
+    "@digital-alchemy/gotify-extension": "^24.6.1",
     "@digital-alchemy/grocy": "^0.3.6",
-    "@digital-alchemy/hass": "^0.3.33",
+    "@digital-alchemy/hass": "^24.6.2",
     "@digital-alchemy/matrix-rendering": "^0.3.0",
-    "@digital-alchemy/mqtt-extension": "^0.3.8",
-    "@digital-alchemy/synapse": "^0.3.8",
+    "@digital-alchemy/mqtt-extension": "^24.6.1",
+    "@digital-alchemy/synapse": "^24.6.1",
     "@digital-alchemy/terminal": "^0.3.4",
     "@faker-js/faker": "^8.4.1",
     "@googlemaps/google-maps-services-js": "^3.4.0",
@@ -73,5 +73,8 @@
     "tsx": "^4.7.2",
     "type-fest": "^4.15.0",
     "typescript": "^5.4.5"
+  },
+  "resolutions": {
+    "@digital-alchemy/core": "24.6.1"
   }
 }

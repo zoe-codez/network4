@@ -64,12 +64,12 @@ export function Dashboard({
   mqtt,
   network4,
 }: TServiceParams) {
-  const officeCurrent = hass.entity.byId("select.office_current_scene");
-  const weather = hass.entity.byId("weather.forecast_home");
-  const climateUpstairs = hass.entity.byId("climate.ecobee_upstairs");
+  const officeCurrent = hass.refBy.id("select.office_current_scene");
+  const weather = hass.refBy.id("weather.forecast_home");
+  const climateUpstairs = hass.refBy.id("climate.ecobee_upstairs");
   const { backupState } = pando.entities;
-  const temperatureUpstairs = hass.entity.byId("sensor.ecobee_upstairs_temperature");
-  const currentLightTemp = hass.entity.byId("sensor.light_temperature");
+  const temperatureUpstairs = hass.refBy.id("sensor.ecobee_upstairs_temperature");
+  const currentLightTemp = hass.refBy.id("sensor.light_temperature");
   const nextEvent = () => {
     // const calc = automation.solar.getCalcSync();
     const now = dayjs();
@@ -85,7 +85,7 @@ export function Dashboard({
       time: dayjs(automation.solar[entry]).format("hh:mm"),
     };
   };
-  // const network3Backups = hass.entity.byId("sensor.network3_backups");
+  // const network3Backups = hass.refBy.id("sensor.network3_backups");
   const isPastSolarNoon = () => dayjs().isAfter(automation.solar.solarNoon);
   const isAfternoon = () => {
     if (!automation.solar.isBetween("solarNoon", "dusk")) {
@@ -94,9 +94,9 @@ export function Dashboard({
     return automation.time.isBefore("PM5");
   };
   const isDay = () => automation.solar.isBetween("dawn", "dusk");
-  const megaMatrix = hass.entity.byId("switch.mega_matrix");
-  const windowOpen = hass.entity.byId("switch.windows_open");
-  const tentMode = hass.entity.byId("select.tent_mode");
+  const megaMatrix = hass.refBy.id("switch.mega_matrix");
+  const windowOpen = hass.refBy.id("switch.windows_open");
+  const tentMode = hass.refBy.id("select.tent_mode");
 
   let cleared = false;
   const inject: GenericWidgetDTO[] = [];

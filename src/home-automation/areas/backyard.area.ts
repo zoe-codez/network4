@@ -1,8 +1,7 @@
 import { HALF, SINGLE, TServiceParams } from "@digital-alchemy/core";
-
 export function BackYard({ hass, automation, context, home_automation }: TServiceParams) {
   const { isHome, houseMode } = home_automation.sensors;
-  const backYardLights = hass.entity.byId("light.back_yard_dimmer");
+  const backYardLights = hass.refBy.id("light.back_yard_dimmer");
 
   automation.managed_switch({
     context,

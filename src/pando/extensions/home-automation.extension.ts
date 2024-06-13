@@ -26,9 +26,9 @@ export function HomeAutomation({
   lifecycle,
 }: TServiceParams) {
   let lastGoToBedMessage = "";
-  const windowOpen = hass.entity.byId("switch.windows_open");
-  const weather = hass.entity.byId("weather.ecobee_upstairs");
-  const climate = hass.entity.byId("climate.ecobee_upstairs");
+  const windowOpen = hass.refBy.id("switch.windows_open");
+  const weather = hass.refBy.id("weather.ecobee_upstairs");
+  const climate = hass.refBy.id("climate.ecobee_upstairs");
 
   weather.onUpdate(async () => await warnWindowShouldBeClosed());
   climate.onUpdate(async () => await warnWindowShouldBeClosed());
@@ -64,10 +64,7 @@ export function HomeAutomation({
     }
     const notificationSent = await cache.get<string>(CACHE_KEY_WINDOW_CLOSE);
     const now = dayjs();
-    if (
-      !is.empty(notificationSent) &&
-      now.subtract(HALF, "hour").isBefore(notificationSent)
-    ) {
+    if (!is.empty(notificationSent) && now.subtract(HALF, "hour").isBefore(notificationSent)) {
       // recently sent
       return;
     }
@@ -103,11 +100,7 @@ export function HomeAutomation({
   }
 
   function getCurrentGoToBedMessage(): string {
-    const [PM10, AM1, NOW] = automation.time.shortTime([
-      "PM10:00",
-      "AM1",
-      "NOW",
-    ]);
+    const [PM10, AM1, NOW] = automation.time.shortTime(["PM10:00", "AM1", "NOW"]);
     if (NOW.isBefore(PM10) && NOW.isAfter(AM1)) {
       return "";
     }

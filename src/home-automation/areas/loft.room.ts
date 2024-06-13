@@ -44,11 +44,11 @@ export function Loft({ automation, context, home_automation, hass }: TServicePar
     },
   });
 
-  const meetingMode = hass.entity.byId("switch.meeting_mode");
-  const loftScene = hass.entity.byId("select.loft_current_scene");
-  const isHome = hass.entity.byId("binary_sensor.zoe_is_home");
-  const climate = hass.entity.byId("climate.ecobee_upstairs");
-  const mode = hass.entity.byId("select.house_mode");
+  const meetingMode = hass.refBy.id("switch.meeting_mode");
+  const loftScene = hass.refBy.id("select.loft_current_scene");
+  const isHome = hass.refBy.id("binary_sensor.zoe_is_home");
+  const climate = hass.refBy.id("climate.ecobee_upstairs");
+  const mode = hass.refBy.id("select.house_mode");
 
   automation.managed_switch({
     context,
