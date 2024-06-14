@@ -26,7 +26,7 @@
     "@digital-alchemy/fastify-extension": "^24.6.1",
     "@digital-alchemy/gotify-extension": "^24.6.1",
     "@digital-alchemy/grocy": "^0.3.6",
-    "@digital-alchemy/hass": "^24.6.2",
+    "@digital-alchemy/hass": "^24.6.4",
     "@digital-alchemy/matrix-rendering": "^0.3.0",
     "@digital-alchemy/mqtt-extension": "^24.6.1",
     "@digital-alchemy/synapse": "^24.6.1",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@cspell/eslint-plugin": "^8.7.0",
-    "@digital-alchemy/type-writer": "^0.3.13",
+    "@digital-alchemy/type-writer": "^24.6.1",
     "@types/async": "^3.2.24",
     "@types/node": "^20.12.7",
     "@types/object-path": "^0.11.4",

@@ -58,7 +58,7 @@ export function BedRoom({
 
   scheduler.cron({
     exec: async () => await stickLight.turn_on(),
-    schedule: CronExpression.EVERY_DAY_AT_MIDNIGHT,
+    schedule: CronExpression.EVERY_DAY_AT_8PM,
   });
 
   automation.managed_switch({
@@ -160,10 +160,7 @@ export function BedRoom({
   home_automation.pico.bed({
     context,
     exec: async () => {
-      room.scene = "auto";
-      if (stickLight.state === "on") {
-        await stickLight.turn_off();
-      }
+      await stickLight.toggle();
     },
     match: ["stop", "stop"],
   });
