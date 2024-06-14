@@ -17,7 +17,7 @@ import {
   Office,
 } from "./areas";
 import { MainController } from "./controllers";
-import { LutronPicoBindings, Microgrowery, SensorsExtension, Timers } from "./extensions";
+import { LutronPicoBindings, PlantTent, SensorsExtension, Timers } from "./extensions";
 import { Zoe } from "./people";
 
 export const HOME_AUTOMATION = CreateApplication({
@@ -39,9 +39,9 @@ export const HOME_AUTOMATION = CreateApplication({
     living: LivingRoom,
     loft: Loft,
     main: MainController,
-    microgrowery: Microgrowery,
     office: Office,
     pico: LutronPicoBindings,
+    plant_tent: PlantTent,
     sensors: SensorsExtension,
     timers: Timers,
     zoe: Zoe,

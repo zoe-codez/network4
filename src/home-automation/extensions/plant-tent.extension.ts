@@ -13,7 +13,7 @@ import { join } from "path";
 
 import { GrowMixture, GrowStatus, scaleMixture, SCHEDULE } from "../helpers";
 
-export function Microgrowery({
+export function PlantTent({
   automation,
   home_automation,
   context,
@@ -63,7 +63,7 @@ export function Microgrowery({
           ...keys.map(i => `${status.currentNutrients[i]}ml ${i}`),
         ].join("\n"),
         priority: MessagePriority.high,
-        title: "Nutrient Update",
+        title: "Nutrient Table",
       });
     },
   });
