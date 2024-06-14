@@ -1,5 +1,4 @@
 import { CronExpression, TServiceParams } from "@digital-alchemy/core";
-import dayjs from "dayjs";
 
 export function Office({
   synapse,
@@ -169,13 +168,6 @@ export function Office({
       }
       return !automation.time.isBetween("AM7", "PM7");
     },
-  });
-
-  const HOUR = 1000 * 60 * 60;
-  scheduler.sliding({
-    exec: () => logger.info("sometime during the workday"),
-    next: () => dayjs().add(Math.floor(Math.random() * 8 * 60), "minute"),
-    reset: CronExpression.MONDAY_TO_FRIDAY_AT_8AM,
   });
 
   // #MARK: fairy lights
