@@ -7,7 +7,6 @@ export * from "./health.extension";
 export * from "./home-automation.extension";
 export * from "./key-coordinator.extension";
 export * from "./maps.extension";
-export * from "./openai.extension";
 export * from "./persistent-notifications.extension";
 export * from "./proxy-manager.extension";
 export * from "./relay.extension";
