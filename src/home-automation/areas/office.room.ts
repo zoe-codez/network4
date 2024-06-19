@@ -12,6 +12,7 @@ export function Office({
 }: TServiceParams) {
   const { meetingMode, isHome } = home_automation.sensors;
   const upstairs = hass.refBy.id("climate.ecobee_upstairs");
+  const meetingModeEntity = hass.refBy.id("switch.meeting_mode");
   const officePlants = hass.refBy.id("switch.desk_strip_office_plants");
   const currentScene = hass.refBy.id("select.office_current_scene");
   const craftSwitch = hass.refBy.id("switch.desk_strip_crafts");
@@ -146,14 +147,6 @@ export function Office({
     },
   });
 
-  automation.solar.onEvent({
-    eventName: "dusk",
-    exec() {
-      logger.info("20 minutes before dusk");
-    },
-    offset: "20m",
-  });
-
   // #MARK: blanket light
   automation.managed_switch({
     context,
@@ -179,6 +172,9 @@ export function Office({
       if (!isHome.is_on) {
         return false;
       }
+      if (meetingMode.is_on) {
+        return true;
+      }
       return automation.time.isBetween("AM7", "PM10");
     },
   });
@@ -203,9 +199,9 @@ export function Office({
   automation.managed_switch({
     context,
     entity_id: "switch.desk_strip_office_plants",
-    onUpdate: [meetingMode, upstairs],
+    onUpdate: [meetingModeEntity, upstairs],
     shouldBeOn() {
-      if (meetingMode.is_on) {
+      if (meetingModeEntity.state === "on") {
         return false;
       }
       if (!automation.solar.isBetween("sunrise", "sunset")) {

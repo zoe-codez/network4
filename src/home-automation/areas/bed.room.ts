@@ -12,6 +12,7 @@ export function BedRoom({
   let earlyStop = false;
   const stickLight = hass.refBy.id("switch.stick_light");
   const ceilingFan = hass.refBy.id("fan.master_bedroom_ceiling_fan");
+
   const { fanSoundPlaying, isHome } = home_automation.sensors;
   // # General functions
 
@@ -25,6 +26,18 @@ export function BedRoom({
       await network4.maple.stopSound();
     }, time);
   }
+
+  synapse.button({
+    context,
+    name: "start white noise",
+    press: async () => await network4.maple.startSound(),
+  });
+
+  synapse.button({
+    context,
+    name: "stop white noise",
+    press: async () => await network4.maple.stopSound(),
+  });
 
   synapse.button({
     context,

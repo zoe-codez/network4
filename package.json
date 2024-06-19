@@ -26,7 +26,7 @@
     "@digital-alchemy/fastify-extension": "^24.6.1",
     "@digital-alchemy/gotify-extension": "^24.6.1",
     "@digital-alchemy/grocy": "^0.3.6",
-    "@digital-alchemy/hass": "^24.6.4",
+    "@digital-alchemy/hass": "^24.6.6",
     "@digital-alchemy/matrix-rendering": "^0.3.0",
     "@digital-alchemy/mqtt-extension": "^24.6.1",
     "@digital-alchemy/synapse": "^24.6.1",
@@ -44,12 +44,14 @@
     "pm2": "^5.3.1",
     "prisma": "^5.12.1",
     "prom-client": "^15.1.1",
+    "quicktype-core": "^23.0.170",
     "redis": "^4.6.13",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@cspell/eslint-plugin": "^8.7.0",
-    "@digital-alchemy/type-writer": "^24.6.1",
+    "@digital-alchemy/type-writer": "^24.6.5",
     "@types/async": "^3.2.24",
     "@types/node": "^20.12.7",
     "@types/object-path": "^0.11.4",

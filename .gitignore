@@ -13,7 +13,6 @@
 *bak
 /fixtures.json
 /src/obsidian
-/src/pando
 
 # compiled output
 /dist
